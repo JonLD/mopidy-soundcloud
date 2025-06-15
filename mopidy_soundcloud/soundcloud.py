@@ -150,10 +150,6 @@ class SoundCloudClient:
         super().__init__()
         self.explore_songs = config["soundcloud"].get("explore_songs", 25)
         self.http_client = get_mopidy_requests_session(config, public=True)
-        adapter = ThrottlingHttpAdapter(
-            burst_length=3, burst_window=1, wait_window=10
-        )
-        self.http_client.mount("https://soundcloud.com/", adapter)
 
         self.public_stream_client = get_mopidy_requests_session(
             config, public=True
