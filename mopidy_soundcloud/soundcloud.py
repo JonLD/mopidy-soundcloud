@@ -283,13 +283,13 @@ class SoundCloudClient:
                 res.raise_for_status()
                 return res.json()
         except Exception as e:
-            if isinstance(e, HTTPError) and e.response.status_code == 401:
-                logger.error(
-                    'Invalid "auth_token" used for SoundCloud '
-                    "authentication!"
-                )
-            else:
-                logger.error(f"SoundCloud API request failed: {e}")
+            # if isinstance(e, HTTPError) and e.response.status_code == 401:
+            #     logger.error(
+            #         'Invalid "auth_token" used for SoundCloud '
+            #         "authentication!"
+            #     )
+            # else:
+            logger.error(f"SoundCloud API request failed: {e}")
         return {}
 
     def sanitize_tracks(self, tracks):
