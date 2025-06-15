@@ -153,7 +153,7 @@ class SoundCloudClient:
         adapter = ThrottlingHttpAdapter(
             burst_length=3, burst_window=1, wait_window=10
         )
-        self.http_client.mount("https://api.soundcloud.com/", adapter)
+        self.http_client.mount("https://soundcloud.com/", adapter)
 
         self.public_stream_client = get_mopidy_requests_session(
             config, public=True
