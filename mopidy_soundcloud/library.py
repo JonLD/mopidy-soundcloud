@@ -13,9 +13,6 @@ def generate_uri(path):
     return f"soundcloud:directory:{urllib.parse.quote('/'.join(path))}"
 
 
-def new_folder(name, path):
-    return models.Ref.directory(uri=generate_uri(path), name=name)
-
 
 def simplify_search_query(query):
     if isinstance(query, dict):
@@ -31,7 +28,6 @@ def simplify_search_query(query):
     else:
         return query
 
-
 class SoundCloudLibraryProvider(backend.LibraryProvider):
     root_directory = models.Ref.directory(
         uri="soundcloud:directory", name="SoundCloud"
@@ -39,85 +35,10 @@ class SoundCloudLibraryProvider(backend.LibraryProvider):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.vfs = {"soundcloud:directory": {}}
-        self.add_to_vfs(new_folder("Following", ["following"]))
-        self.add_to_vfs(new_folder("Liked", ["liked"]))
-        self.add_to_vfs(new_folder("Sets", ["sets"]))
-        self.add_to_vfs(new_folder("Stream", ["stream"]))
-
-    def add_to_vfs(self, _model):
-        self.vfs["soundcloud:directory"][_model.uri] = _model
-
-    def list_sets(self):
-        sets_vfs = collections.OrderedDict()
-        for name, set_id, _tracks in self.backend.remote.get_sets():
-            sets_list = new_folder(name, ["sets", set_id])
-            logger.debug(f"Adding set {sets_list.name} to VFS")
-            sets_vfs[set_id] = sets_list
-        return list(sets_vfs.values())
-
-    def list_liked(self):
-        vfs_list = collections.OrderedDict()
-        for track in self.backend.remote.get_likes():
-            logger.debug(f"Adding liked track {track.name} to VFS")
-            vfs_list[track.name] = models.Ref.track(
-                uri=track.uri, name=track.name
-            )
-        return list(vfs_list.values())
-
-    def list_user_follows(self):
-        sets_vfs = collections.OrderedDict()
-        for name, user_id in self.backend.remote.get_followings():
-            sets_list = new_folder(name, ["following", user_id])
-            logger.debug(f"Adding set {sets_list.name} to VFS")
-            sets_vfs[user_id] = sets_list
-        return list(sets_vfs.values())
-
-    def tracklist_to_vfs(self, track_list):
-        vfs_list = collections.OrderedDict()
-        for temp_track in track_list:
-            if not isinstance(temp_track, Track):
-                temp_track = self.backend.remote.parse_track(temp_track)
-            if hasattr(temp_track, "uri"):
-                vfs_list[temp_track.name] = models.Ref.track(
-                    uri=temp_track.uri, name=temp_track.name
-                )
-        return list(vfs_list.values())
-
-    def browse(self, uri):
-        if not self.vfs.get(uri):
-            (req_type, res_id) = re.match(r".*:(\w*)(?:/(\d*))?", uri).groups()
-            # Sets
-            if "sets" == req_type:
-                if res_id:
-                    return self.tracklist_to_vfs(
-                        self.backend.remote.get_set(res_id)
-                    )
-                else:
-                    return self.list_sets()
-            # Following
-            if "following" == req_type:
-                if res_id:
-                    return self.tracklist_to_vfs(
-                        self.backend.remote.get_tracks(res_id)
-                    )
-                else:
-                    return self.list_user_follows()
-            # Liked
-            if "liked" == req_type:
-                return self.list_liked()
-            # User stream
-            if "stream" == req_type:
-                return self.tracklist_to_vfs(
-                    self.backend.remote.get_user_stream()
-                )
-
-        # root directory
-        return list(self.vfs.get(uri, {}).values())
 
     def search(self, query=None, uris=None, exact=False):
         # TODO Support exact search
-
+        logger.info(f"[SoundCloud] Search called with query: {query}")
         if not query:
             return
 
