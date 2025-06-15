@@ -54,7 +54,7 @@ def get_requests_session(proxy_config, user_agent, token, public=False):
     return session
 
 
-def get_mopidy_requests_session(config, public=False):
+def get_mopidy_requests_session(config, public=True):
     return get_requests_session(
         proxy_config=config["proxy"],
         user_agent=(

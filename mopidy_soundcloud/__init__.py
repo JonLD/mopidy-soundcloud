@@ -27,12 +27,12 @@ class Extension(ext.Extension):
     def validate_config(self, config):  # no_coverage
         if not config.getboolean("soundcloud", "enabled"):
             return
-        if not config.get("soundcloud", "auth_token"):
-            raise ExtensionError(
-                "In order to use SoundCloud extension you must provide an "
-                "auth token. For more information refer to "
-                "https://github.com/mopidy/mopidy-soundcloud/"
-            )
+        # if not config.get("soundcloud", "auth_token"):
+        #     raise ExtensionError(
+        #         "In order to use SoundCloud extension you must provide an "
+        #         "auth token. For more information refer to "
+        #         "https://github.com/mopidy/mopidy-soundcloud/"
+        #     )
 
     def setup(self, registry):
         from .actor import SoundCloudBackend
