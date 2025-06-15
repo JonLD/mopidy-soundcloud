@@ -385,7 +385,7 @@ class SoundCloudClient:
             self._update_public_client_id()
 
         progressive_urls = {}
-        if sharing == "public" and self.public_client_id is not None:
+        if self.public_client_id is not None:
             res = self.public_stream_client.get(permalink_url)
 
             for html_substring in res.text.split('"'):
@@ -416,19 +416,19 @@ class SoundCloudClient:
                         f"\n{self.parse_fail_reason(stream.reason)}"
                     )
 
-        # ~quickly yields rate limit errors
-        req = self.http_client.head(stream_url)
-        if req.status_code == 302:
-            return req.headers.get("Location", None)
-        elif req.status_code == 429:
-            logger.warning(
-                "SoundCloud daily rate limit exceeded "
-                f"{self.parse_fail_reason(req.reason)}"
-            )
-            if progressive_urls.get("preview"):
-                logger.info("Playing public preview stream")
-                stream = self._get_public_stream(progressive_urls["preview"])
-                return stream.json().get("url")
+        # # ~quickly yields rate limit errors
+        # req = self.http_client.head(stream_url)
+        # if req.status_code == 302:
+        #     return req.headers.get("Location", None)
+        # elif req.status_code == 429:
+        #     logger.warning(
+        #         "SoundCloud daily rate limit exceeded "
+        #         f"{self.parse_fail_reason(req.reason)}"
+        #     )
+        #     if progressive_urls.get("preview"):
+        #         logger.info("Playing public preview stream")
+        #         stream = self._get_public_stream(progressive_urls["preview"])
+        #         return stream.json().get("url")
 
     def resolve_tracks(self, track_ids):
         """Resolve tracks concurrently emulating browser
