@@ -43,13 +43,9 @@ def get_user_url(user_id):
 
 def get_requests_session(proxy_config, user_agent, token, public=False):
     proxy = httpclient.format_proxy(proxy_config)
-    full_user_agent = httpclient.format_user_agent(user_agent)
 
     session = requests.Session()
     session.proxies.update({"http": proxy, "https": proxy})
-    if not public:
-        session.headers.update({"user-agent": full_user_agent})
-        session.headers.update({"Authorization": f"OAuth {token}"})
 
     return session
 
@@ -153,7 +149,7 @@ class SoundCloudClient:
     def __init__(self, config):
         super().__init__()
         self.explore_songs = config["soundcloud"].get("explore_songs", 25)
-        self.http_client = get_mopidy_requests_session(config)
+        self.http_client = get_mopidy_requests_session(config, public=True)
         adapter = ThrottlingHttpAdapter(
             burst_length=3, burst_window=1, wait_window=10
         )
