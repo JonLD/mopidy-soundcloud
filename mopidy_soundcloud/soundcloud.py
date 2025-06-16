@@ -272,7 +272,7 @@ class SoundCloudClient:
 
     def _get(self, url, limit=None):
         self._update_public_client_id()
-        url = f"https://api-v2.soundcloud.com/search/{url}&client_id=1JEFtFgP4Mocy0oEGJj2zZ0il9pEpBrM"
+        url = f"https://api.soundcloud.com/search/{url}&client_id=2t9loNQH90kzJcsFCODdigxfp325aq4z"
         params = []
         if limit:
             params.insert(0, ("limit", self.explore_songs))
