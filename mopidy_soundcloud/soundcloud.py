@@ -270,7 +270,7 @@ class SoundCloudClient:
         return self.parse_results([self._get(f"resolve?url={uri}")])
 
     def _get(self, url, limit=None):
-        url = f"https://api.soundcloud.com/{url}"
+        url = f"https://api.soundcloud.com/{url}&client_id=1JEFtFgP4Mocy0oEGJj2zZ0il9pEpBrM"
         params = []
         if limit:
             params.insert(0, ("limit", self.explore_songs))
