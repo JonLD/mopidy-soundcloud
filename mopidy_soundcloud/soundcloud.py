@@ -298,14 +298,6 @@ class SoundCloudClient:
     def parse_track(self, data, remote_url=False):
         if not data:
             return None
-        if data.get("streamable") is not True:
-            logger.info(
-                f"{data.get('title')!r} can't be streamed from SoundCloud"
-            )
-            return None
-        if not data.get("kind") == "track":
-            logger.debug(f"{data.get('title')} is not a track")
-            return None
 
         track_kwargs = {}
         artist_kwargs = {}
