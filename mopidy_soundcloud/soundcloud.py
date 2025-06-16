@@ -246,6 +246,7 @@ class SoundCloudClient:
         search_results = self._get(f"tracks?q={query}", limit=True)
         tracks = []
         for track in search_results:
+            logger.info(track)
             tracks.append(self.parse_track(track, False))
         return self.sanitize_tracks(tracks)
 
