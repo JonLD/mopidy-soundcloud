@@ -355,7 +355,7 @@ class SoundCloudClient:
         def get_page(url):
             return self.public_stream_client.get(url).content.decode("utf-8")
 
-        public_page = get_page("https://api.soundcloud.com/")
+        public_page = get_page("https://api-v2.soundcloud.com/")
         regex_str = r"client_id=([a-zA-Z0-9]{16,})"
         soundcloud_soup = BeautifulSoup(public_page, "html.parser")
         scripts = soundcloud_soup.find_all("script", attrs={"src": True})
