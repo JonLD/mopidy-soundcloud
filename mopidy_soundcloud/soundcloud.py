@@ -156,7 +156,7 @@ class SoundCloudClient:
         )
 
     @property
-    @cache()
+    # @cache()
     def user(self):
         return self._get("me")
 
@@ -178,7 +178,7 @@ class SoundCloudClient:
 
         return self.sanitize_tracks(tracks)
 
-    @cache(ttl=10)
+    # @cache(ttl=10)
     def get_followings(self, user_id=None):
         user_url = get_user_url(user_id)
         users = []
@@ -190,13 +190,13 @@ class SoundCloudClient:
             users.append((user_name, user_id))
         return users
 
-    @cache()
+    # @cache()
     def get_set(self, set_id):
         # https://developers.soundcloud.com/docs/api/reference#playlists
         playlist = self._get(f"playlists/{set_id}")
         return playlist.get("tracks", [])
 
-    @cache(ttl=10)
+    # @cache(ttl=10)
     def get_sets(self, user_id=None):
         user_url = get_user_url(user_id)
         playable_sets = []
@@ -210,21 +210,21 @@ class SoundCloudClient:
             playable_sets.append((name, set_id, tracks))
         return playable_sets
 
-    @cache(ttl=10)
+    # @cache(ttl=10)
     def get_likes(self, user_id=None):
         # https://developers.soundcloud.com/docs/api/reference#GET--users--id--favorites
         user_url = get_user_url(user_id)
         likes = self._get(f"{user_url}/favorites", limit=True)
         return self.parse_results(likes)
 
-    @cache(ttl=10)
+    # @cache(ttl=10)
     def get_tracks(self, user_id=None):
         user_url = get_user_url(user_id)
         tracks = self._get(f"{user_url}/tracks", limit=True)
         return self.parse_results(tracks)
 
     # Public
-    @cache()
+    #@cache()
     def get_track(self, track_id, streamable=False):
         logger.debug(f"Getting info for track with ID {track_id}")
         try:
@@ -293,7 +293,7 @@ class SoundCloudClient:
     def sanitize_tracks(self, tracks):
         return [t for t in tracks if t]
 
-    @cache()
+    # @cache()
     def parse_track(self, data, remote_url=False):
         if not data:
             return None
