@@ -275,6 +275,7 @@ class SoundCloudClient:
         if limit:
             params.insert(0, ("limit", self.explore_songs))
         try:
+            logger.info(f"[SoundCloud] query url: {url}")
             with closing(self.http_client.get(url, params=params)) as res:
                 logger.debug(f"Requested {res.url}")
                 res.raise_for_status()
