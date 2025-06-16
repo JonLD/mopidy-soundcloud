@@ -297,7 +297,7 @@ class SoundCloudClient:
     def parse_track(self, data, remote_url=False):
         if not data:
             return None
-        if not data.get("streamable"):
+        if not data.get("streamable", False):
             logger.info(
                 f"{data.get('title')!r} can't be streamed from SoundCloud"
             )
