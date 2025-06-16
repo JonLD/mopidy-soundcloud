@@ -40,9 +40,11 @@ class SoundCloudLibraryProvider(backend.LibraryProvider):
         # TODO Support exact search
         logger.info(f"[SoundCloud] Search called with query: {query}")
         if not query:
+            logger.info(f"[SoundCloud] no query: {query}")
             return
 
         if "uri" in query:
+            logger.info(f"[SoundCloud] uri query: {query}")
             search_query = "".join(query["uri"])
             url = urllib.parse.urlparse(search_query)
             if "soundcloud.com" in url.netloc:

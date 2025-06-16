@@ -241,6 +241,7 @@ class SoundCloudClient:
 
     def search(self, query):
         # https://developers.soundcloud.com/docs/api/reference#tracks
+        logger.info(f"[backend SoundCloud] search query: {query}")
         query = quote_plus(query.encode("utf-8"))
         search_results = self._get(f"tracks?q={query}", limit=True)
         tracks = []
@@ -269,7 +270,7 @@ class SoundCloudClient:
         return self.parse_results([self._get(f"resolve?url={uri}")])
 
     def _get(self, url, limit=None):
-        url = f"https://soundcloud.com/{url}"
+        url = f"https://api.soundcloud.com/{url}"
         params = []
         if limit:
             params.insert(0, ("limit", self.explore_songs))
@@ -352,7 +353,7 @@ class SoundCloudClient:
         def get_page(url):
             return self.public_stream_client.get(url).content.decode("utf-8")
 
-        public_page = get_page("https://soundcloud.com/")
+        public_page = get_page("https://api.soundcloud.com/")
         regex_str = r"client_id=([a-zA-Z0-9]{16,})"
         soundcloud_soup = BeautifulSoup(public_page, "html.parser")
         scripts = soundcloud_soup.find_all("script", attrs={"src": True})
